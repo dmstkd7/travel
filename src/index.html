@@ -7,9 +7,40 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  
+
+  <!-- 산 템플릿입니다을 링크 하는 곳입니다 시작-->
+  <link href="http://fonts.googleapis.com/css?family=Nunito:300,400,700" rel="stylesheet" type="text/css">
+  <link href="app/assets/libraries/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link href="app/assets/libraries/colorbox/example1/colorbox.css" rel="stylesheet" type="text/css" >
+  <link href="app/assets/libraries/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" type="text/css">
+  <link href="app/assets/libraries/bootstrap-fileinput/fileinput.min.css" rel="stylesheet" type="text/css">
+  <link href="app/assets/css/superlist.css" rel="stylesheet" type="text/css" >
+	
+  <!-- 산 템플릿입니다을 링크 하는 곳입니다 끝-->
+
 </head>
 <body>
   <app-root>Loading...</app-root>
+  
+
+  <script src="https://www.gstatic.com/firebasejs/3.3.2/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyAElY_orDwpGhEr6NWLvFHxV2T0TVLeycw",
+      authDomain: "travel-bd272.firebaseapp.com",
+      databaseURL: "https://travel-bd272.firebaseio.com",
+      storageBucket: "travel-bd272.appspot.com",
+      messagingSenderId: "403140138923"
+    };
+    firebase.initializeApp(config);
+  </script>
+  
+
+  <script src="https://maps.googleapis.com/maps/api/js?libraries=places,drawing&key=AIzaSyA9ACIjrub01ObiNGEcEvsbNDWVyTNKRx8"
+          type="text/javascript"></script>
+
+
 </body>
+
 </html>

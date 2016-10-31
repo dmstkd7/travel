@@ -1,0 +1,18 @@
+<header>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+
+      <ul class="nav navbar-nav">
+
+        <li routerLinkActive="active" ><a [routerLink]="['findtravel']">랜덤여행짜기</a></li>
+        <li routerLinkActive="active" ><a [routerLink]="['placelist']">추천장소</a></li>
+        <li><a>Protected</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right" >
+        <li *ngIf="!isAuth()" ><a [routerLink]="['signup']" >Sign Up</a></li>
+        <li *ngIf="!isAuth()" ><a [routerLink]="['signin']">Sign In</a></li>
+        <li *ngIf="isAuth()" ><a (click)="onLogout()" style="cursor: pointer;">Logout</a></li>
+      </ul>
+    </div><!-- /.container-fluid -->
+  </nav>
+</header>

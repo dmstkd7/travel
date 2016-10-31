@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<body class="listing-map">
+<div class="page-wrapper">
+	
+	<div class="main">
+		<div class="fullscreen-wrapper">
+			<div class="fullscreen-scroll">
+				<div class="fullscreen-scroll-inner">
+					<div class="fullscreen-scroll-padding">
+						<form class="filter" method="post" action="?">
+							<div class="row">
+								<div class="col-sm-12 col-md-4">
+									<div class="form-group">
+										<input id="first-place" type="text" placeholder="Enter start place" class="form-control">
+									</div><!-- /.form-group -->
+								</div><!-- /.col-* -->
+								
+								<div class="col-sm-12 col-md-4">
+									<div class="form-group">
+										<select class="form-control" title="놀고 싶은 구역" (change)="onPlaceChanged($event.target.value)">
+											<option>놀고 싶은 구역</option>
+											<option *ngFor="let i of locations">{{i}}</option>
+										</select>
+									</div><!-- /.form-group -->
+								</div><!-- /.col-* -->
+								
+								<div class="col-sm-12 col-md-4">
+									<div class="form-group">
+										<select class="form-control" title="놀고 싶은 시간" (change)="onTimeChanged($event.target.value)">
+											<option>놀고 싶은 시간</option>
+											<option *ngFor="let i of times">{{i}}</option>
+										</select>
+									</div><!-- /.form-group -->
+								</div><!-- /.col-* -->
+							</div><!-- /.row -->
+							
+							<hr>
+							
+							<div class="row">
+								<div class="col-sm-8">
+									<div class="filter-actions">
+										<a href="#"><i class="fa fa-close"></i> Reset Filter</a>
+										<a href="#"><i class="fa fa-save"></i> Save Search</a>
+										<a id="start-Lat" name="startLat" [(ngModel)] = selectedStartPlaceLat ngDefaultControl>0</a>
+										<a id="start-Lng" name="startLng" [(ngModel)] = selectedStartPlaceLng ngDefaultControl>0</a>
+									</div><!-- /.filter-actions -->
+								</div><!-- /.col-* -->
+								
+								
+								
+								<div class="col-sm-4">
+									<button type="submit" class="btn btn-primary" (click)="onFindButtonClicked()">여행 출바알~!</button>
+								</div><!-- /.col-* -->
+							</div><!-- /.row -->
+						</form>
+						
+						
+						<h2 class="page-title">
+							1802 results matching your query
+							
+							<form method="get" action="?" class="filter-sort">
+								<div class="form-group">
+									<select title="Sort by">
+										<option name="price">Price</option>
+										<option name="rating">Rating</option>
+										<option name="title">Title</option>
+									</select>
+								</div><!-- /.form-group -->
+								
+								<div class="form-group">
+									<select title="Order">
+										<option name="ASC">Asc</option>
+										<option name="DESC">Desc</option>
+									</select>
+								</div><!-- /.form-group -->
+							</form>
+						</h2><!-- /.page-title -->
+						
+						<div class="cards-row">
+							<div class="card-row"  *ngFor="let place of places" (click)="onSelectItem(place)">
+								<div class="card-row-inner">
+									<div class="card-row-image" data-background-image="">
+										<div class="card-row-label" (click)="onSelectItem(place)">종류</div><!-- /.card-row-label -->
+										
+										<div class="card-row-price">{{place.price}} \</div><!-- -->
+									
+									</div><!-- /.card-row-image -->
+									
+									<div class="card-row-body">
+										<h2 class="card-row-title" (click)="onSelectItem(place)" >{{place.title}}</h2>
+										<div class="card-row-content"><p>{{ place.description | slice:0:30 }}</p></div><!-- /.card-row-content -->
+									</div><!-- /.card-row-body -->
+									
+									<div class="card-row-properties">
+										<dl>
+											
+											<dd>Price</dd><dt>{{place.price}} $</dt>
+											
+											
+											
+											<dd>Category</dd><dt>종류를 나타낸 것</dt>
+											
+											
+											
+											<dd>Location</dd><dt> {{place.address}} {{place.latitude}} {{place.longitude}} $</dt>
+											
+											
+											<dd>Rating</dd>
+											<dt>
+											<div class="card-row-rating">
+												<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>
+											</div><!-- /.card-row-rating -->
+											</dt>
+										</dl>
+									</div><!-- /.card-row-properties -->
+								</div><!-- /.card-row-inner -->
+							</div><!-- /.card-row -->
+						
+						</div><!-- /.cards-row -->
+					
+					</div><!-- /.fullscreen-scroll-padding -->
+				</div><!-- /.fullscreen-scroll-inner -->
+			</div><!-- /.fullscreen-scroll -->
+			
+			<div    id="fullscreen-map"
+			        data-transparent-marker-image="app/assets/img/transparent-marker-image.png"
+			        data-styles='[{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#444444"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi.government","elementType":"labels.text.fill","stylers":[{"color":"#b43b3b"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"hue":"#ff0000"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road","elementType":"geometry.fill","stylers":[{"lightness":"8"},{"color":"#bcbec0"}]},{"featureType":"road","elementType":"labels.text.fill","stylers":[{"color":"#5b5b5b"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#7cb3c9"},{"visibility":"on"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#abb9c0"}]},{"featureType":"water","elementType":"labels.text","stylers":[{"color":"#fff1f1"},{"visibility":"off"}]}]'
+			        class="fullscreen-map">
+			</div><!-- /.fullscreen-map -->
+		</div><!-- /.fullscreen-wrapper -->
+	
+	</div><!-- /.main -->
+</div><!-- /.page-wrapper -->
+<body>

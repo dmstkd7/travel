@@ -1,0 +1,482 @@
+<div class="page-wrapper">
+	
+	<div class="main">
+		<div class="main-inner">
+			<div class="container">
+				<div class="row">
+					
+					<div class="col-sm-8 col-lg-9">
+						<form class="content" (ngSubmit)="onSubmit(f.value)" #f="ngForm">
+							<div class="page-title">
+								<h1>Submit Listing</h1>
+								<h1></h1>
+							</div>
+							
+							<div class="background-white p30 mb30">
+								<h3 class="page-title">Description</h3>
+								<div class="form-group">
+									<input class="form-control"
+									       type="text"
+									       id="place-name"
+									       required class="form-control"
+									       [(ngModel)] = "place.title"
+									       name = "title"
+									       placeholder="Title">
+								</div><!-- /.form-group -->
+								
+								<div class="form-group">
+									<textarea class="form-control"
+									          type="text"
+									          id="item-description"
+									          class="form-control"
+									          [(ngModel)] = "place.description"
+									          name="description"
+									          required
+									          placeholder="Listing Description"
+									          rows="8"></textarea>
+								</div><!-- /.form-group -->
+							</div><!-- /.box -->
+							
+							<div class="background-white p30 mb30">
+								<h3 class="page-title">Attributes</h3>
+								
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<select name="카테고리" (change)="onCategoryChange($event.target.value)">
+												<option>카테고리</option>
+												<option *ngFor="let i of category">{{i}}</option>
+											</select>
+										</div><!-- /.form-group -->
+										
+										<div class="form-group" >
+											<select name="지역" (change)="onLocationChange($event.target.value)" >
+												<option>지역</option>
+												<option *ngFor="let i of locations">{{i}}</option>
+											</select>
+										</div><!-- /.form-group -->
+										
+										<div class="form-group">
+											<select name="추천나이대" (change)="onRecommandAgeChange($event.target.value)">
+												<option>추천나이대</option>
+												<option *ngFor="let i of recommandAge">{{i}}</option>
+											</select>
+										</div><!-- /.form-group -->
+										
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+											<input class="form-control"
+											       type="text"
+											       id="place-price"
+											       [(ngModel)] = "place.price"
+											       name="price"
+											       placeholder="Price">
+										</div><!-- /.form-group -->
+										
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-building-o"></i></span>
+											<input class="form-control"
+											       type="text"
+											       id="place-subtitle"
+											       [(ngModel)] = "place.subtitle"
+											       name="subtitle"
+											       placeholder="Subtitle">
+										</div>
+									</div><!-- /.col-* -->
+									
+									
+									<div class="col-sm-6">
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-building-o"></i></span>
+											<input class="form-control"
+											       type="text"
+											       id="place-address"
+											       [(ngModel)] = "place.address"
+											       name="address"
+											       placeholder="Address">
+										</div><!-- /.form-group -->
+										
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-map-o"></i></span>
+											<input class="form-control"
+											       type="text"
+											       id="place-city"
+											       [(ngModel)] = "place.city"
+											       name="city"
+											       placeholder="City">
+										</div><!-- /.form-group -->
+										
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-phone"></i></span>
+											<input class="form-control"
+											       type="text"
+											       id="place-phone"
+											       [(ngModel)] = "place.phone"
+											       name="phone"
+											       placeholder="Phone">
+										</div><!-- /.form-group -->
+										
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-at"></i></span>
+											<input class="form-control"
+											       type="text"
+											       id="place-email"
+											       [(ngModel)] = "place.email"
+											       name="email"
+											       placeholder="E-mail">
+										</div><!-- /.form-group -->
+									</div><!-- /.col-* -->
+								</div><!-- /.row -->
+							</div><!-- /.box -->
+							
+							<div class="row">
+								<div class="col-sm-12">
+									
+									<div class="background-white p30 mb30">
+										<h2 class="page-title">Map Position</h2>
+										
+										<input id="pac-input" class="controls form-control mb30" type="text" placeholder="Enter a location">
+										
+										<div id="map-canvas"></div>
+										
+										<div class="row">
+											<div class="col-sm-6">
+												<div class="input-group">
+													<span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+													<input class="form-control"
+													       type="text"
+													       placeholder="Latitude"
+													       id="place-latitude"
+													       name="latitude"
+													       [(ngModel)] = place.latitude	>
+													
+												</div><!-- /.form-group -->
+											</div><!-- /.col-* -->
+											
+											<div class="col-sm-6">
+												<div class="input-group">
+													<span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+													<input class="form-control"
+													       type="text"
+													       placeholder="Longitude"
+													       id="place-longitude"
+													       name="longitude"
+													       [(ngModel)] = place.longitude
+													>
+												</div><!-- /.form-group -->
+											</div><!-- /.col-* -->
+										</div><!-- /.row -->
+									</div><!-- /.box -->
+								</div>
+								
+								<div class="col-sm-12">
+									<div class="background-white p30 mb30">
+										<h2 class="page-title">Gallery</h2>
+										
+										<img *ngIf="uploadedImg" [src]="imgUrl" />
+										
+										<style media="screen" >
+											body {
+												display: flex;
+												min-hiehgt: 100wh;
+												width:100%;
+												padding: 0;
+												margin: 0;
+												align-items:center;
+												justify-content: center;
+												flex-direction: column;
+											}
+											
+											#uploader{
+											~webkit-appearance: none;
+												appearnace: none;
+												width: 50%;
+												margin-bottom: 10px;
+											}
+										
+										</style>
+										
+										
+										<progress value="0" max="100" id="uploader">0%</progress>
+										<input type="file" value="upload" id="fileButton" />
+										
+									</div><!-- /.box -->
+								</div>
+								
+								
+								
+								
+							</div><!-- /.row -->
+							
+							
+							<div class="background-white p30 mb30">
+								<h3 class="page-title">Amenities</h3>
+								
+								<ul class="amenities">
+									<li class="checkbox"><input type="checkbox" id="amenity-1" (change)="onAmenitiesChange('자연절경')"> <label for="amenity-1">자연절경</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-2"(change)="onAmenitiesChange('쇼핑몰/백화점')"> <label for="amenity-2">쇼핑몰/백화점</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-3"(change)="onAmenitiesChange('랜드마크')"> <label for="amenity-3">랜드마크</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-4"(change)="onAmenitiesChange('전경/야경')"> <label for="amenity-4">전경/야경</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-5"(change)="onAmenitiesChange('해변/항구')"> <label for="amenity-5">해변/항구</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-6"(change)="onAmenitiesChange('성당/교회')"> <label for="amenity-6">성당/교회</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-7"(change)="onAmenitiesChange('유명한거리')"> <label for="amenity-7">유명한거리</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-8"(change)="onAmenitiesChange('테마파크')"> <label for="amenity-8">테마파크</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-9"(change)="onAmenitiesChange('공원/정원')"> <label for="amenity-9">공원/정원</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-10"(change)="onAmenitiesChange('공항')"> <label for="amenity-10">공항</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-11"(change)="onAmenitiesChange('맛집')"> <label for="amenity-11">맛집</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-12"(change)="onAmenitiesChange('유적')"> <label for="amenity-12">유적</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-13"(change)="onAmenitiesChange('데이트')"> <label for="amenity-13">데이트</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-14"(change)="onAmenitiesChange('섬')"> <label for="amenity-14">섬</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-15"(change)="onAmenitiesChange('체험')"> <label for="amenity-15">체험</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-16"(change)="onAmenitiesChange('전망대')"> <label for="amenity-16">전망대</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-17"(change)="onAmenitiesChange('바비큐')"> <label for="amenity-17">바비큐</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-18"(change)="onAmenitiesChange('기념비')"> <label for="amenity-18">기념비</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-19"(change)="onAmenitiesChange('학교/도서관')"> <label for="amenity-19">학교/도서관</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-20"(change)="onAmenitiesChange('전시/공연')"> <label for="amenity-20">전시/공연</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-21"(change)="onAmenitiesChange('박물관')"> <label for="amenity-21">박물관</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-22"(change)="onAmenitiesChange('웰니스/스파')"> <label for="amenity-22">웰니스/스파</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-23"(change)="onAmenitiesChange('클럽')"> <label for="amenity-23">클럽</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-24"(change)="onAmenitiesChange('전통요리')"> <label for="amenity-24">전통요리</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-25"(change)="onAmenitiesChange('산/숲')"> <label for="amenity-25">산/숲</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-26"(change)="onAmenitiesChange('바다')"> <label for="amenity-26">바다</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-27"(change)="onAmenitiesChange('카페/디저트')"> <label for="amenity-27">카페/디저트</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-28"(change)="onAmenitiesChange('이자카야')"> <label for="amenity-28">이자카야</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-29"(change)="onAmenitiesChange('술집')"> <label for="amenity-29">술집</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-30"(change)="onAmenitiesChange('서양식/미국식')"> <label for="amenity-30">서양식/미국식</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-31"(change)="onAmenitiesChange('동양식/한국식')"> <label for="amenity-31">동양식/한국식</label></li>
+									<li class="checkbox"><input type="checkbox" id="amenity-32"(change)="onAmenitiesChange('워터파크')"> <label for="amenity-32">워터파크</label></li>
+								</ul>
+							</div>
+							
+							<div class="center">
+								<button type="submit" class="btn btn-primary btn-xl">Submit Listing</button>
+							</div><!-- /.center -->
+						
+						</form><!-- /.content -->
+					</div><!-- /.col-* -->
+					
+					<div class="col-sm-4 col-lg-3">
+						<div class="sidebar">
+							<div class="widget">
+								<h2 class="widgettitle">Recent Listings</h2>
+								
+								<div class="cards-small">
+									<div class="card-small">
+										<div class="card-small-image">
+											<a href="listing-detail.html">
+												<img src="app/assets/img/tmp/product-2.jpg" alt="Tasty Brazil Coffee">
+											</a>
+										</div><!-- /.card-small-image -->
+										
+										<div class="card-small-content">
+											<h3><a href="listing-detail.html">Tasty Brazil Coffee</a></h3>
+											<h4><a href="listing-detail.html">New York / Village</a></h4>
+											
+											<div class="card-small-price">$180 / person</div>
+										</div><!-- /.card-small-content -->
+									</div><!-- /.card-small -->
+								</div><!-- /.cards-small -->
+								
+								
+								
+								<div class="cards-small">
+									<div class="card-small">
+										<div class="card-small-image">
+											<a href="listing-detail.html">
+												<img src="app/assets/img/tmp/product-3.jpg" alt="Healthy Breakfast">
+											</a>
+										</div><!-- /.card-small-image -->
+										
+										<div class="card-small-content">
+											<h3><a href="listing-detail.html">Healthy Breakfast</a></h3>
+											<h4><a href="listing-detail.html">New York / Village</a></h4>
+											
+											<div class="card-small-price">$180 / person</div>
+										</div><!-- /.card-small-content -->
+									</div><!-- /.card-small -->
+								</div><!-- /.cards-small -->
+								
+								
+								
+								<div class="cards-small">
+									<div class="card-small">
+										<div class="card-small-image">
+											<a href="listing-detail.html">
+												<img src="app/assets/img/tmp/product-4.jpg" alt="Coffee &amp; Newspaper">
+											</a>
+										</div><!-- /.card-small-image -->
+										
+										<div class="card-small-content">
+											<h3><a href="listing-detail.html">Coffee &amp; Newspaper</a></h3>
+											<h4><a href="listing-detail.html">New York / Village</a></h4>
+											
+											<div class="card-small-price">$180 / person</div>
+										</div><!-- /.card-small-content -->
+									</div><!-- /.card-small -->
+								</div><!-- /.cards-small -->
+							
+							</div><!-- /.widget -->
+							
+							
+							<div class="widget">
+								<h2 class="widgettitle">Filter</h2>
+								
+								<div class="background-white p20">
+									<form method="post" action="?">
+										<div class="form-group">
+											<label for="">Keyword</label>
+											<input type="text" class="form-control">
+										</div><!-- /.form-group -->
+										
+										<div class="form-group">
+											<label for="">Category</label>
+											
+											<select class="form-control" title="Select Category">
+												<option>Automotive</option>
+												<option>Real Estate</option>
+											</select>
+										</div><!-- /.form-group -->
+										
+										<div class="form-group">
+											<label for="">Location</label>
+											<select class="form-control" title="Select Location">
+												<option>New York</option>
+												<option>San Francisco</option>
+											</select>
+										</div><!-- /.form-group -->
+										
+										<div class="form-group">
+											<label for="">Starting Price</label>
+											<input type="text" class="form-control" >
+										</div><!-- /.form-group -->
+										
+										<button class="btn btn-primary btn-block" type="submit">Search</button>
+									</form>
+								</div>
+							</div><!-- /.widget -->
+							
+							
+							<div class="widget">
+								<h2 class="widgettitle">Working Hours</h2>
+								
+								<div class="p20 background-white">
+									<div class="working-hours">
+										<div class="day clearfix">
+											<span class="name">Mon</span><span class="hours">07:00 AM - 07:00 PM</span>
+										</div><!-- /.day -->
+										
+										<div class="day clearfix">
+											<span class="name">Tue</span><span class="hours">07:00 AM - 07:00 PM</span>
+										</div><!-- /.day -->
+										
+										<div class="day clearfix">
+											<span class="name">Wed</span><span class="hours">07:00 AM - 07:00 PM</span>
+										</div><!-- /.day -->
+										
+										<div class="day clearfix">
+											<span class="name">Thu</span><span class="hours">07:00 AM - 07:00 PM</span>
+										</div><!-- /.day -->
+										
+										<div class="day clearfix">
+											<span class="name">Fri</span><span class="hours">07:00 AM - 07:00 PM</span>
+										</div><!-- /.day -->
+										
+										<div class="day clearfix">
+											<span class="name">Sat</span><span class="hours">07:00 AM - 02:00 PM</span>
+										</div><!-- /.day -->
+										
+										<div class="day clearfix">
+											<span class="name">Sun</span><span class="hours">Closed</span>
+										</div><!-- /.day -->
+									</div>
+								</div>
+							</div><!-- /.widget -->
+							
+							
+							<div class="widget">
+								<h2 class="widgettitle">Categories</h2>
+								
+								<ul class="menu">
+									<li><a href="#">Automotive</a></li>
+									<li><a href="#">Jobs</a></li>
+									<li><a href="#">Nightlife</a></li>
+									<li><a href="#">Services</a></li>
+									<li><a href="#">Transportation</a></li>
+									<li><a href="#">Real Estate</a></li>
+									<li><a href="#">Restaurants</a></li>
+								</ul><!-- /.menu -->
+							</div><!-- /.wifget -->
+							
+							
+							<div class="widget">
+								<h2 class="widgettitle">Archives</h2>
+								
+								<ul class="menu">
+									<li><a href="#">August <strong class="pull-right">12</strong></a></li>
+									<li><a href="#">July <strong class="pull-right">23</strong></a></li>
+									<li><a href="#">June <strong class="pull-right">53</strong></a></li>
+								</ul><!-- /.menu -->
+							</div><!-- /.wifget -->
+						
+						</div><!-- /.sidebar -->
+					</div><!-- /.col-* -->
+				</div><!-- /.row -->
+			</div><!-- /.container -->
+		</div><!-- /.main-inner -->
+	</div><!-- /.main -->
+	
+	<footer class="footer">
+		<div class="footer-top">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-4">
+						<h2>About Superlist</h2>
+						
+						<p>Superlist is directory template built upon Bootstrap and SASS to bring great experience in creation of directory.</p>
+					</div><!-- /.col-* -->
+					
+					<div class="col-sm-4">
+						<h2>Contact Information</h2>
+						
+						<p>
+							Your Street 123, Melbourne, Australia<br>
+							+1-123-456-789, <a href="#">sample@example.com</a>
+						</p>
+					</div><!-- /.col-* -->
+					
+					<div class="col-sm-4">
+						<h2>Stay Connected</h2>
+						
+						<ul class="social-links nav nav-pills">
+							<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+							<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+							<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+							<li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+							<li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+							<li><a href="#"><i class="fa fa-instagram"></i></a></li>
+							<li><a href="#"><i class="fa fa-pinterest-p"></i></a></li>
+						</ul><!-- /.header-nav-social -->
+					</div><!-- /.col-* -->
+				</div><!-- /.row -->
+			</div><!-- /.container -->
+		</div><!-- /.footer-top -->
+		
+		<div class="footer-bottom">
+			<div class="container">
+				<div class="footer-bottom-left">
+					&copy; 2015 All rights reserved. Created by <a href="#">Aviators</a>.
+				</div><!-- /.footer-bottom-left -->
+				
+				<div class="footer-bottom-right">
+					<ul class="nav nav-pills">
+						<li><a href="index.html">Home</a></li>
+						<li><a href="pricing.html">Pricing</a></li>
+						<li><a href="terms-conditions.html">Terms &amp; Conditions</a></li>
+						<li><a href="contact-1.html">Contact</a></li>
+					</ul><!-- /.nav -->
+				</div><!-- /.footer-bottom-right -->
+			</div><!-- /.container -->
+		</div>
+	</footer><!-- /.footer -->
+
+</div><!-- /.page-wrapper -->

@@ -1,0 +1,205 @@
+<div class="page-wrapper">
+	
+	<div class="main">
+		<div class="main-inner">
+			<div class="container">
+				<div class="content">
+					
+					<div class="document-title">
+						<h1>여행 목록</h1>
+						
+						<ul class="breadcrumb">
+							<li><a href="/placelist/addPlace">글쓰기</a></li>
+						</ul>
+					</div><!-- /.document-title -->
+					
+					
+					
+					<form class="filter" method="post" action="?">
+						<div class="row">
+							<div class="col-sm-12 col-md-4">
+								<div class="form-group">
+									<input type="text" placeholder="Keyword" class="form-control">
+								</div><!-- /.form-group -->
+							</div><!-- /.col-* -->
+							
+							<div class="col-sm-12 col-md-4">
+								<div class="form-group">
+									<select class="form-control" title="Select Location">
+										<option>Bronx</option>
+										<option>Brooklyn</option>
+										<option>Manhattan</option>
+										<option>Staten Island</option>
+										<option>Queens</option>
+									</select>
+								</div><!-- /.form-group -->
+							</div><!-- /.col-* -->
+							
+							<div class="col-sm-12 col-md-4">
+								<div class="form-group">
+									<select class="form-control" title="Select Category">
+										<option value="">Automotive</option>
+										<option value="">Jobs</option>
+										<option value="">Nightlife</option>
+										<option value="">Services</option>
+									</select>
+								</div><!-- /.form-group -->
+							</div><!-- /.col-* -->
+						</div><!-- /.row -->
+						
+						<hr>
+						
+						<div class="row">
+							<div class="col-sm-8">
+								<div class="filter-actions">
+									<a href="#"><i class="fa fa-close"></i> Reset Filter</a>
+									<a href="#"><i class="fa fa-save"></i> Save Search</a>
+								</div><!-- /.filter-actions -->
+							</div><!-- /.col-* -->
+							
+							<div class="col-sm-4">
+								<button type="submit" class="btn btn-primary">Redefine Search Result</button>
+							</div><!-- /.col-* -->
+						</div><!-- /.row -->
+					</form>
+					
+					
+					<h2 class="page-title">
+						결과를 보여주는 곳입니다
+						
+						
+						<form method="get" action="?" class="filter-sort">
+							<div class="form-group">
+								<select title="Sort by">
+									<option >Price</option>
+									<option >Rating</option>
+									<option >Title</option>
+								</select>
+							</div><!-- /.form-group -->
+							
+							<div class="form-group">
+								<select title="Order">
+									<option >Asc</option>
+									<option>Desc</option>
+								</select>
+							</div><!-- /.form-group -->
+						</form>
+					</h2><!-- /.page-title -->
+					
+					
+					<div class="cards-row">
+						
+						<div class="card-row"  *ngFor="let place of places" (click)="onSelectItem(place)">
+							<div class="card-row-inner">
+								<div class="card-row-image" data-background-image="">
+									<img class="img-responsive" style="	height: 200px;	position: relative;	width: 262px; }" src = {{place.imgUrl}}/>
+									<div class="card-row-label" (click)="onSelectItem(place)">종류</div><!-- /.card-row-label -->
+									
+									<div class="card-row-price">{{place.price}} \</div><!-- -->
+								
+								</div><!-- /.card-row-image -->
+								
+								<div class="card-row-body">
+									<h2 class="card-row-title" (click)="onSelectItem(place)" >{{place.title}}</h2>
+									<div class="card-row-content"><p>{{ place.description | slice:0:30 }}</p></div><!-- /.card-row-content -->
+								</div><!-- /.card-row-body -->
+								
+								<div class="card-row-properties">
+									<dl>
+										
+										<dd>Price</dd><dt>{{place.price}} $</dt>
+										
+										
+										
+										<dd>Category</dd><dt>종류를 나타낸 것</dt>
+										
+										
+										
+										<dd>Location</dd><dt> {{place.address}} {{place.latitude}} {{place.longitude}} $</dt>
+										
+										
+										<dd>Rating</dd>
+										<dt>
+										<div class="card-row-rating">
+											<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>
+										</div><!-- /.card-row-rating -->
+										</dt>
+									</dl>
+								</div><!-- /.card-row-properties -->
+							</div><!-- /.card-row-inner -->
+						</div><!-- /.card-row -->
+						
+					</div><!-- /.cards-row -->
+					
+					
+					<div class="pager">
+						<ul>
+							<li><a href="placelist/list/{{currentPage+1}}" >Prev</a></li>
+							<li *ngIf="currentPage !== 1"><a href="placelist/list/{{currentPage-1}}">{{currentPage-1}}</a></li>
+							<li class="active"><a>{{currentPage}}</a></li>
+							<li><a href="placelist/list/{{currentPage+1}}" >{{currentPage+1}}</a></li>
+							<li><a href="placelist/list/{{currentPage+1}}">Next</a></li>
+						</ul>
+					</div><!-- /.pagination -->
+				
+				
+				</div><!-- /.content -->
+			</div><!-- /.container -->
+		</div><!-- /.main-inner -->
+	</div><!-- /.main -->
+	
+	<footer class="footer">
+		<div class="footer-top">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-4">
+						<h2>About Superlist</h2>
+						
+						<p>Superlist is directory template built upon Bootstrap and SASS to bring great experience in creation of directory.</p>
+					</div><!-- /.col-* -->
+					
+					<div class="col-sm-4">
+						<h2>Contact Information</h2>
+						
+						<p>
+							Your Street 123, Melbourne, Australia<br>
+							+1-123-456-789, <a href="#">sample@example.com</a>
+						</p>
+					</div><!-- /.col-* -->
+					
+					<div class="col-sm-4">
+						<h2>Stay Connected</h2>
+						
+						<ul class="social-links nav nav-pills">
+							<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+							<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+							<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+							<li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+							<li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+							<li><a href="#"><i class="fa fa-instagram"></i></a></li>
+							<li><a href="#"><i class="fa fa-pinterest-p"></i></a></li>
+						</ul><!-- /.header-nav-social -->
+					</div><!-- /.col-* -->
+				</div><!-- /.row -->
+			</div><!-- /.container -->
+		</div><!-- /.footer-top -->
+		
+		<div class="footer-bottom">
+			<div class="container">
+				<div class="footer-bottom-left">
+					&copy; 2015 All rights reserved. Created by <a href="#">Aviators</a>.
+				</div><!-- /.footer-bottom-left -->
+				
+				<div class="footer-bottom-right">
+					<ul class="nav nav-pills">
+						<li><a href="index.html">Home</a></li>
+						<li><a href="pricing.html">Pricing</a></li>
+						<li><a href="terms-conditions.html">Terms &amp; Conditions</a></li>
+						<li><a href="contact-1.html">Contact</a></li>
+					</ul><!-- /.nav -->
+				</div><!-- /.footer-bottom-right -->
+			</div><!-- /.container -->
+		</div>
+	</footer><!-- /.footer -->
+
+</div><!-- /.page-wrapper -->
