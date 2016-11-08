@@ -2,6 +2,8 @@ import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {PlaceListService} from "../place-list.service";
 import {Place} from "../place";
+import {AuthService} from "../../../shared/auth.service";
+
 declare var google: any;
 declare var firebase: any;
 
@@ -13,9 +15,10 @@ export class PlaceDetailComponent implements OnInit, OnDestroy {
 	
 	subscribe: any;
 	place: Place;
+	currentPlaceId: string;
 	gallery_picture = ''
 	
-	constructor(private placeListService: PlaceListService , private route: ActivatedRoute) { }
+	constructor(private placeListService: PlaceListService , private route: ActivatedRoute, private authService: AuthService) { }
 	
 	ngOnInit( ){
 		
@@ -23,6 +26,7 @@ export class PlaceDetailComponent implements OnInit, OnDestroy {
 		
 		this.subscribe = this.route.params.subscribe(params => {
 			let id = +params['id'];
+			this.currentPlaceId = "" +id;
 			this.place = this.placeListService.getPlace(id);
 			/*
 			 이미지 list를 넣는 것입니다
@@ -61,10 +65,25 @@ export class PlaceDetailComponent implements OnInit, OnDestroy {
 		map.setCenter(markerPosition);
 		marker.setPosition(markerPosition);
 		marker.setVisible(true);
+		
 	}
 	
 	ngOnDestroy(){
 		this.subscribe.unsubscribe();
+	}
+	
+	
+	onSubmit() {
+		//HTML의 아이디를 통해서 값을 가져옵니다
+
+		var rating = document.getElementById("place-rate")['value'];
+		var user = this.authService.getLoginUserUid();
+		
+		this.placeListService.setUserPlaceRating(user, this.currentPlaceId, rating).subscribe(
+			data => console.log(data),
+			error => console.error(error)
+		);
+		
 	}
 	
 	

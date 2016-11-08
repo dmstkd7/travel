@@ -24,13 +24,27 @@
 									<i class="fa fa-star" *ngFor="let cnt of place.rating"></i>
 								</div><!-- /.detail-banner-rating -->
 								
+								
+								
+
+								<div class="input-group">
+									<span class="input-group-addon"><i class="fa fa-building-o"></i></span>
+									<input class="form-control"
+									       type="text"
+									       id="place-rate"
+									       name="rating"
+									       placeholder=" 별점주기">
+								</div><!-- /.form-group -->
+							
+								
 								<div class="detail-banner-btn bookmark">
 									<i class="fa fa-bookmark-o"></i> <span data-toggle="Bookmarked">Bookmark</span>
 								</div><!-- /.detail-claim -->
 								
-								<div class="detail-banner-btn heart">
+								<div class="detail-banner-btn heart" (click) = "onSubmit()">
 									<i class="fa fa-heart-o"></i> <span data-toggle="I Love It">Give Heart</span>
 								</div><!-- /.detail-claim -->
+								
 							
 							</div><!-- /.detail-banner-left -->
 						</div><!-- /.container -->

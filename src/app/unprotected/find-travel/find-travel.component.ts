@@ -46,6 +46,7 @@ export class FindTravelComponent implements OnInit {
 	
 	
 	ngOnInit() {
+		console.log(this.placeListService.getRecommandPlace());
 		
 		//place가 바뀌면 바로 받을 수 있게 한 것입니다
 		this.placeListService.placesChanged.subscribe(
@@ -116,6 +117,8 @@ export class FindTravelComponent implements OnInit {
 			infowindow.open(map, marker);
 		});
 
+		
+		
     }
 	
 	

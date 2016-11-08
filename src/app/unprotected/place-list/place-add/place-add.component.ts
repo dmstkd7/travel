@@ -31,7 +31,7 @@ export class PlaceAddComponent implements OnChanges , OnInit{
 	imgUrl = '';
 	uploadedImg = false;
 	
-	
+
 	userEmail = this.authService.getLoginUserEmail();
 	//place_id를 부여하기 위해  place를 구하는 것입니다
 	place_id :number;
@@ -58,13 +58,24 @@ export class PlaceAddComponent implements OnChanges , OnInit{
 	constructor(private pls: PlaceListService , private authService: AuthService, private router: Router) {
 		//아이디, 타이틀, 부제목, 설명, 가격, 주소, 도시, 전화번호, 이메일, 평점, 글작성자, 카테고리, 추천나이대, 종류, 위도, 경도, 즐기는 시간, 구종류(ex마포구, 위치), imgURL
 		
+		//아이디를 처음에 부여받는것입니다
+		let that = this;
+		var ref = firebase.database().ref("places");
+		var new_id:number
+		ref.once("value")
+			.then(function(snapshot) {
+				var a = snapshot.numChildren();
+				that.place_id= a+1;
+				console.log("아이디 체크");
+				console.log(that.place_id);
+			});
 		
 		this.place =  new Place(0, '', '' , '', 0,'','','','',0, this.userEmail, '선택','선택',[], 0,0, 0, '', '');
 		
 	}
 	
-	
 	ngOnInit(){
+		
 		
 		this.pls.placesChanged.subscribe(
 			(places: Place[])=> this.places = places
@@ -75,7 +86,7 @@ export class PlaceAddComponent implements OnChanges , OnInit{
 		var mapProperty = {
 			center: hongik,
 			zoom: 13,
-			mapTypeId: google.maps.MapTypeId.HYBRID
+			mapTypeId: google.maps.MapTypeId.ROAD
 		};
 		var map = new google.maps.Map(document.getElementById("map-canvas"), mapProperty);
 		
@@ -160,7 +171,9 @@ export class PlaceAddComponent implements OnChanges , OnInit{
 			var file = e.target.files[0];
 			
 			//create a storage ref
-			var storageRef = firebase.storage().ref('photos/' + file.name);
+			var storage = firebase.storage();
+			var storageRef = storage.ref('photos/' + file.name);
+			
 			
 			var task = storageRef.put(file);
 			
@@ -173,6 +186,22 @@ export class PlaceAddComponent implements OnChanges , OnInit{
 					
 				},
 				function complete() {
+					
+					var tt = that;
+					/*
+					 이미지 list를 넣는 것입니다
+					 */
+					storage.ref().child('photos/' + file.name).getDownloadURL().then(function(url) {
+						// Get the download URL for 'images/stars.jpg'
+						// This can be inserted into an <img> tag
+						// This can also be downloaded directly
+						tt.place.imgUrl = url;
+						console.log(url);
+						
+					}).catch(function(error) {
+						tt.place.imgUrl = "http://cfile21.uf.tistory.com/image/222EEA3F56542C812CEA83";
+					});
+					
 				}
 			);
 			
@@ -195,15 +224,13 @@ export class PlaceAddComponent implements OnChanges , OnInit{
 		}
 		
 	}
-
 	
 	onSubmit(place: Place) {
 		//HTML의 아이디를 통해서 값을 가져옵니다
 		this.place.latitude = document.getElementById("place-latitude")['value'];
 		this.place.longitude = document.getElementById("place-longitude")['value'];
 		
-					
-		let newPlace = new Place(0, place.title, place.subtitle, place.description, place.price,
+		let newPlace = new Place(this.place_id, place.title, place.subtitle, place.description, place.price,
 			place.address, place.city, place.phone, place.email, place.rating,
 			this.userEmail, this.place.category, this.place.recommandAge, this.place.type,
 			this.place.latitude, this.place.longitude, this.place.playingTime, this.place.location, ' ');
@@ -212,14 +239,12 @@ export class PlaceAddComponent implements OnChanges , OnInit{
 			this.onClear();
 		} else{
 			
-
-			
-			
 			this.place = newPlace;
 			//this.pls.addPlace(this.place);
 		}
-		
 	
+		
+		console.log(this.place['id']);
 		
 		this.pls.storePlace(this.place).subscribe(
 			data => console.log(data),

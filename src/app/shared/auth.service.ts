@@ -55,6 +55,12 @@ export class AuthService{
     if (user != null)
       return user.email;
   }
-
+  
+  //로그인한 유저의 uid를 가져오는 것
+	getLoginUserUid(){
+		var user = firebase.auth().currentUser;
+		if(user!=null)
+			return user.uid;
+	}
 
 }
