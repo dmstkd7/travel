@@ -15,12 +15,10 @@ export class PlaceListService{
 	
 	constructor(private http: Http){}
 	
-
 	//places의 길이를 구하는 함수입니다 id를 부여할 때 사용합니다
 	getPlacesLength(){
 		return this.places.length;
 	}
-	
 	
 	getPlace(id: number | string){
 		for(let place of this.places) {
@@ -32,7 +30,6 @@ export class PlaceListService{
 	getPlaces(){
 
 	}
-	
 	
 	addPlace(place: Place){
 		this.places.push(place);
@@ -221,11 +218,14 @@ export class PlaceListService{
 	}
 	
 	
-	getRecommandPlace(){
-		return this.http.get("http://223.194.70.126:5000/ShgXY5S5hZeeRIksJsqP00GcOK52")
-			.subscribe(data => {
-				console.log(data);
-			})
+	
+	//추천장소를 받는 곳입니다
+	getRecommandPlace(user:string){
+		
+		return this.http.get("http://223.194.70.126:5000/" + user)
+			.map((data: Response)=> data.json())
+
 	}
+	
 	
 }

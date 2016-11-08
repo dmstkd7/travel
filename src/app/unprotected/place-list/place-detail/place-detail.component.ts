@@ -83,8 +83,5 @@ export class PlaceDetailComponent implements OnInit, OnDestroy {
 			data => console.log(data),
 			error => console.error(error)
 		);
-		
 	}
-	
-	
 }

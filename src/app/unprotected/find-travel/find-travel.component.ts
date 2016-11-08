@@ -2,6 +2,7 @@ import {Component, OnInit, Input} from '@angular/core';
 import {Place} from "../place-list/place";
 import {Router} from "@angular/router";
 import {PlaceListService} from "../place-list/place-list.service";
+import {AuthService} from "../../shared/auth.service";
 declare var google: any;
 
 
@@ -14,6 +15,8 @@ export class FindTravelComponent implements OnInit {
 	
 	places: Place[] = [];
 	
+	recommendPlaces: any = [];
+	
 	//선택된 장소와 시간
 	@Input() selectedStartPlaceLat: number = 0;
 	@Input() selectedStartPlaceLng: number = 0;
@@ -25,7 +28,7 @@ export class FindTravelComponent implements OnInit {
 	dp = [];
 	MAX_V: number = 10;
 	orderOfVisit = [];
-	
+	data:any;
 
 	
 	//아이디, 타이틀, 부제목, 설명, 가격, 주소, 도시, 전화번호, 이메일, 평점, 글작성자, 카테고리, 추천나이대, 종류, 위도, 경도, 즐기는 시간, 구종류(ex마포구, 위치)
@@ -41,12 +44,27 @@ export class FindTravelComponent implements OnInit {
 		"동대문구","성동구","종로구","중구","용산구", "은평구"
 	];
 	
-    constructor(private placeListService: PlaceListService, private router: Router) { }
+    constructor(private placeListService: PlaceListService, private router: Router, private autuService: AuthService) { }
 	
 	
 	
 	ngOnInit() {
-		console.log(this.placeListService.getRecommandPlace());
+		
+		
+		//추천장소를 먼저 받는다
+		var recommendPlaces;
+		var currentUserUID = this.autuService.getLoginUserUid();
+		
+		
+		this.placeListService.getRecommandPlace("ShgXY5S5hZeeRIksJsqP00GcOK52")
+			.subscribe(
+				(data: any) => {
+					this.recommendPlaces = data;
+					console.log("come");
+					console.log(this.recommendPlaces);
+				});
+		
+		
 		
 		//place가 바뀌면 바로 받을 수 있게 한 것입니다
 		this.placeListService.placesChanged.subscribe(
@@ -155,12 +173,38 @@ export class FindTravelComponent implements OnInit {
 		));
 	}
 	
-	
+
 	
 	onFindButtonClicked(){
 		this.placeListService.onGetPlacesFromDatabaseFilterPlace(this.selectedPlace);
 		
+		//추천장소를 가져옵니다 먼저
+		
+		
 		const myArray = [];
+		
+		//먼저 id에 맞는 place 리스트를 뽑아 내자
+		//맞는 id를 찾았다면 이것이 특정 거리에 있는지 뽑아내자
+		console.log(this.recommendPlaces);
+		console.log("2222");
+		
+		for(let place of this.places){
+			for( let recommendPlace of this.recommendPlaces ){
+				console.log("fffffff");
+				console.log(recommendPlace);
+				console.log(place.id);
+				if(place.id == recommendPlace){
+					console.log("this come");
+					if( ( place.latitude >>  this.selectedStartPlaceLat - 0.019) && (place.latitude << this.selectedStartPlaceLat +0.019)
+						&& ( place.longitude >>  this.selectedStartPlaceLng - 0.022) && (place.longitude << this.selectedStartPlaceLng +0.022) ){
+						myArray.push(place);
+						console.log("come");
+						console.log(place);
+					}
+				}
+			}
+		}
+		
 		
 		//2km 내에 있는 장소를 모두 가져옵니다
 		//처음 myArray의 첫번째 요소는 시작지점이 되야 합니다
@@ -171,6 +215,8 @@ export class FindTravelComponent implements OnInit {
 		
 		myArray.push(this.startPlace);
 		for (let place of this.places){
+			if(myArray.length >10 )
+				break;
 			if( ( place.latitude >>  this.selectedStartPlaceLat - 0.019) && (place.latitude << this.selectedStartPlaceLat +0.019)
 			&& ( place.longitude >>  this.selectedStartPlaceLng - 0.022) && (place.longitude << this.selectedStartPlaceLng +0.022) ){
 				myArray.push(place);
@@ -186,11 +232,10 @@ export class FindTravelComponent implements OnInit {
 					continue;
 				}
 				this.distance[i][j] = this.getDistance(myArray[i].latitude, myArray[i].longitude, myArray[j].latitude, myArray[j].longitude);
-				console.log(i);
-				console.log(j);
-				console.log(this.distance[i][j]);
 			}
 		}
+		
+		
 		
 		/*
 		    외판원 순회를 다이나믹 프로그래밍으로 구현하고, 갔던 루트를 복구 하는 알고리즘입니다
