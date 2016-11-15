@@ -110,21 +110,18 @@
 								</div>
 							</div>
 							
-							<h2>Video</h2>
-							<div class="detail-video">
-								<iframe src="https://player.vimeo.com/video/36911719?color=009f8b&byline=0&portrait=0" width="653" height="366" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-							</div><!-- /.detail-video -->
+				
 							
 							<h2 id="reviews">All Reviews</h2>
 							<div class="reviews">
 								<div class="review">
 									<div class="review-image">
-										<img src="assets/img/tmp/agent-1.jpg" alt="">
+										<img src="http://cfile22.uf.tistory.com/image/261D883D563412662A0BF5" alt="">
 									</div><!-- /.review-image -->
 									
 									<div class="review-inner">
 										<div class="review-title">
-											<h2>Nancy Collins</h2>
+											<h2>장은상</h2>
 											
 											<span class="report">
                     <span class="separator">&#8226;</span><i class="fa fa-flag" title="Report" data-toggle="tooltip" data-placement="top"></i>
@@ -143,10 +140,10 @@
 										<div class="review-content-wrapper">
 											<div class="review-content">
 												<div class="review-pros">
-													<p>Quisque aliquet ornare nunc in viverra. Nullam ornare molestie ligula in luctus. Suspendisse ac cursus elit. In congue mattis felis, non hendrerit orci dictum id.</p>
+													<p>경치가 멋있어서 좋았습니다. 가격도 저렴하였고 꼭 한 번 가시면 좋을 곳입니다.</p>
 												</div><!-- /.pros -->
 												<div class="review-cons">
-													<p>Duis et magna vel est tempus vehicula vitae sit amet enim. Sed vitae ligula congue.</p>
+													<p>사람이 너무 많아서 불편한 점이 많았습니다</p>
 												</div><!-- /.cons -->
 											</div><!-- /.review-content -->
 											
@@ -193,12 +190,12 @@
 								
 								<div class="review">
 									<div class="review-image">
-										<img src="assets/img/tmp/agent-2.jpg" alt="">
+										<img src="http://cdn.bulbagarden.net/upload/3/3e/039Jigglypuff.png" alt="">
 									</div><!-- /.review-image -->
 									
 									<div class="review-inner">
 										<div class="review-title">
-											<h2>Kim Glove</h2>
+											<h2>임동찬</h2>
 											<span class="report">
                     <span class="separator">&#8226;</span><i class="fa fa-flag" title="Report" data-toggle="tooltip" data-placement="top"></i>
                 </span>
@@ -217,10 +214,10 @@
 										<div class="review-content-wrapper">
 											<div class="review-content">
 												<div class="review-pros">
-													<p>Quisque aliquet ornare nunc in viverra. Nullam ornare molestie ligula in luctus.</p>
+													<p>모든 사람이 친절한게 가장 큰 강점이었습니다. 가격도 저렴하였고 추천합니다.</p>
 												</div><!-- /.pros -->
 												<div class="review-cons">
-													<p>Suspendisse ac cursus elit. In congue mattis felis, non hendrerit orci dictum id. Duis et magna vel est tempus vehicula vitae sit amet enim. Sed vitae ligula congue.</p>
+													<p>너무 번잡한게 가장 큰 흠이었습니다.</p>
 												</div><!-- /.cons -->
 											</div><!-- /.review-content -->
 											
@@ -267,12 +264,12 @@
 								
 								<div class="review">
 									<div class="review-image">
-										<img src="assets/img/tmp/agent-5.jpg" alt="">
+										<img src="http://vignette2.wikia.nocookie.net/pokemon/images/a/a5/116%EC%8F%98%EB%93%9C%EB%9D%BC.png/revision/latest?cb=20141204084425&path-prefix=ko" alt="">
 									</div><!-- /.review-image -->
 									
 									<div class="review-inner">
 										<div class="review-title">
-											<h2>Richard Peterson</h2>
+											<h2>한국인</h2>
 											<span class="report">
                     <span class="separator">&#8226;</span><i class="fa fa-flag" title="Report" data-toggle="tooltip" data-placement="top"></i>
                 </span>
@@ -290,10 +287,10 @@
 										<div class="review-content-wrapper">
 											<div class="review-content">
 												<div class="review-pros">
-													<p>Quisque aliquet ornare nunc in viverra. Nullam ornare molestie ligula in luctus. Suspendisse ac cursus elit. In congue mattis felis, non hendrerit orci dictum id.</p>
+													<p>정말 추천합니다.</p>
 												</div><!-- /.pros -->
 												<div class="review-cons">
-													<p>Duis et magna vel est tempus vehicula vitae sit amet enim. Sed vitae ligula congue.</p>
+													<p>반대합니다 이게 뭔지 참.</p>
 												</div><!-- /.cons -->
 											</div><!-- /.review-content -->
 											
@@ -375,35 +372,33 @@
 								</div><!-- /.detail-actions -->
 							</div>
 							
-							<h2>About <span class="text-secondary">Brazilian Coffe Taste</span></h2>
+							<h2>About <span class="text-secondary">{{place.title}}</span></h2>
 							<div class="background-white p20">
 								<div class="detail-vcard">
 									<div class="detail-logo">
-										<img src="assets/img/tmp/pragmaticmates-logo.png">
+										<img class="img-responsive"  src = '' id="gallery1_img"/>
 									</div><!-- /.detail-logo -->
 									
 									<div class="detail-contact">
 										<div class="detail-contact-email">
-											<i class="fa fa-envelope-o"></i> <a href="mailto:#">company@example.com</a>
+											<i class="fa fa-envelope-o"></i> <a href="mailto:#"> E: {{place.email}}</a>
 										</div>
 										<div class="detail-contact-phone">
-											<i class="fa fa-mobile-phone"></i> <a href="tel:#">+01-23-456-789</a>
+											<i class="fa fa-mobile-phone"></i> <a href="tel:#"> P: {{place.phone}}</a>
 										</div>
 										<div class="detail-contact-website">
-											<i class="fa fa-globe"></i> <a href="#">www.superlist.com</a>
+											<i class="fa fa-globe"></i> <a href="#">www.naver.com</a>
 										</div>
 										<div class="detail-contact-address">
-											<i class="fa fa-map-o"></i>
-											347/26 22nd Avenue<br>
-											NYC AZ 85705, USA
+											<i class="fa fa-map-o"></i> A:
+											{{place.address}}
 										</div>
 									</div><!-- /.detail-contact -->
 								</div><!-- /.detail-vcard -->
 								
 								<div class="detail-description">
-									<p>Vestibulum a lectus ullamcorper, dapibus ante id, sagittis libero. In tincidunt nisi venenatis, ornare eros at, hendrerit sem. Nunc metus purus, porta a dignissim vel, vulputate sed odio. Aenean est nisi, pulvinar eget velit quis, placerat hendrerit arcu. Vestibulum non dictum nibh.</p>
-									<p>In congue mattis felis, non hendrerit orci dictum id. Etiam consequat nulla vitae tempus interdum.Nam gravida convallis lacus, at dignissim urna pulvinar sed.</p>
-									<p>Cras ac mi odio. Aliquam erat volutpat. Cras euismod facilisis ligula in tristique. Proin et eleifend lacus, vitae dictum orci</p>
+									<p>{{place.description}}</p>
+
 								</div>
 								
 								<div class="detail-follow">

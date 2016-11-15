@@ -36,9 +36,11 @@ export class PlaceDetailComponent implements OnInit, OnDestroy {
 				// This can be inserted into an <img> tag
 				// This can also be downloaded directly
 				document.getElementById("gallery_img")['src'] = url;
+				document.getElementById("gallery1_img")['src'] = url;
 				
 			}).catch(function(error) {
 				document.getElementById("gallery_img")['src'] = "http://cfile21.uf.tistory.com/image/222EEA3F56542C812CEA83";
+				document.getElementById("gallery1_img")['src'] = "http://cfile21.uf.tistory.com/image/222EEA3F56542C812CEA83";
 			});
 			
 			

@@ -91,8 +91,9 @@
 						
 						<div class="card-row"  *ngFor="let place of places" (click)="onSelectItem(place)">
 							<div class="card-row-inner">
+								
 								<div class="card-row-image" data-background-image="">
-									<img class="img-responsive" style="	height: 200px;	position: relative;	width: 262px; }" src = {{place.imgUrl}}/>
+									<img class="img-responsive" style="	height: 275px;	position: relative;	width: 262px; }" src = {{place.imgUrl}}/>
 									<div class="card-row-label" (click)="onSelectItem(place)">종류</div><!-- /.card-row-label -->
 									
 									<div class="card-row-price">{{place.price}} \</div><!-- -->

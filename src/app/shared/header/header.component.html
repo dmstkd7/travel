@@ -2,11 +2,11 @@
   <nav class="navbar navbar-default">
     <div class="container-fluid">
 
-      <ul class="nav navbar-nav">
+      <ul class="header-nav-primary nav navbar-nav collapse navbar-collapse">
 
-        <li routerLinkActive="active" ><a [routerLink]="['findtravel']">랜덤여행짜기</a></li>
+        <li class="active" routerLinkActive="active" ><a [routerLink]="['findtravel']">랜덤여행짜기</a></li>
         <li routerLinkActive="active" ><a [routerLink]="['placelist']">추천장소</a></li>
-        <li><a>Protected</a></li>
+        <li><a>Blog</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right" >
         <li *ngIf="!isAuth()" ><a [routerLink]="['signup']" >Sign Up</a></li>
@@ -16,3 +16,4 @@
     </div><!-- /.container-fluid -->
   </nav>
 </header>
+

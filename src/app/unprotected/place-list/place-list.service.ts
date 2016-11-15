@@ -3,6 +3,7 @@ import {Place} from "./place";
 import {Injectable, EventEmitter} from "@angular/core";
 import {Http, Response, Headers} from "@angular/http";
 import "rxjs/Rx";
+import {AuthService} from "../../shared/auth.service";
 
 declare var firebase: any
 
@@ -11,7 +12,9 @@ export class PlaceListService{
 	
 
 	private places: Place[] = [];
+	private recommandPlaces: Place[] = [];
 	placesChanged = new EventEmitter<Place[]>();
+	recommandPlacesChanged = new EventEmitter<Place[]>();
 	
 	constructor(private http: Http){}
 	
@@ -224,7 +227,68 @@ export class PlaceListService{
 		
 		return this.http.get("http://223.194.70.126:5000/" + user)
 			.map((data: Response)=> data.json())
-
+				.subscribe(
+					(data: any) => {
+						this.recommandPlaces = data;
+						console.log("recommandPlaces");
+						console.log(this.recommandPlaces);
+						
+					});
+		
+	}
+	
+	
+	
+	//home에서 8개를 받을 때 쓰는 함수입니다
+	//데이터베이스에서 모든 장소들을 다 가져올 때 사용하는 방식입니다
+	//최신 데이터를 sorting을 통해서 placelist에 반환시킵니다
+	onGetPlacesFromDatabaseLatestCountVersion(count:number){
+		return this.http.get('https://travel-bd272.firebaseio.com/places.json?&print=pretty')
+			.map((data: Response) => data.json())
+			.subscribe(
+				(data: Place[]) => {
+					const myArray =[];
+					for (let key in data){
+						myArray.push(data[key]);
+					}
+					
+					//sorting해서 최신 데이터가 맨 위로 올라오게 하는 것입니다
+					myArray.sort((n1:Place,n2:Place) =>{
+						if(n1.id > n2.id) {
+							return -1;
+						}
+						return 1;
+					});
+					
+					var storageRef = firebase.storage().ref();
+					const filter = [];
+					for (let i = 0; (i < count && i< myArray.length); i++) {
+						
+						/*
+						 이미지 list를 넣는 것입니다
+						 */
+						
+						storageRef.child('photos/' + myArray[i]['id'] + '.jpg').getDownloadURL().then(function(url) {
+							// Get the download URL for 'images/stars.jpg'
+							// This can be inserted into an <img> tag
+							// This can also be downloaded directly
+							myArray[i]['imgUrl'] = url;
+							console.log(url);
+							
+						}).catch(function(error) {
+							myArray[i]['imgUrl'] = "http://cfile21.uf.tistory.com/image/222EEA3F56542C812CEA83";
+						});
+						
+						filter.push(myArray[i]);
+					}
+					
+					
+					
+					this.places = filter;
+					
+					this.placesChanged.emit(this.places);
+				}
+			);
 	}
 	
 	

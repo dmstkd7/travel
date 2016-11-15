@@ -4,7 +4,7 @@ import {Router} from "@angular/router";
 import {PlaceListService} from "../place-list/place-list.service";
 import {AuthService} from "../../shared/auth.service";
 declare var google: any;
-
+declare var firebase: any
 
 @Component({
   selector: 'app-find-travel',
@@ -14,8 +14,9 @@ declare var google: any;
 export class FindTravelComponent implements OnInit {
 	
 	places: Place[] = [];
-	
-	recommendPlaces: any = [];
+	recommendPlaces: Place[] = [];
+	filteringPlaces: Place[] = [];
+	filteringImages:any[] = [];
 	
 	//선택된 장소와 시간
 	@Input() selectedStartPlaceLat: number = 0;
@@ -29,7 +30,8 @@ export class FindTravelComponent implements OnInit {
 	MAX_V: number = 10;
 	orderOfVisit = [];
 	data:any;
-
+	
+	currentUserUID:any;
 	
 	//아이디, 타이틀, 부제목, 설명, 가격, 주소, 도시, 전화번호, 이메일, 평점, 글작성자, 카테고리, 추천나이대, 종류, 위도, 경도, 즐기는 시간, 구종류(ex마포구, 위치)
 	startPlace: Place = new Place(0, '', '' , '', 0,'','','','',0, '', '선택','선택',[], 0,0, 0, '', '');
@@ -44,32 +46,48 @@ export class FindTravelComponent implements OnInit {
 		"동대문구","성동구","종로구","중구","용산구", "은평구"
 	];
 	
-    constructor(private placeListService: PlaceListService, private router: Router, private autuService: AuthService) { }
+    constructor(private placeListService: PlaceListService, private router: Router, private autuService: AuthService) {
+	    
+	    
+    }
 	
 	
 	
 	ngOnInit() {
 		
-		
 		//추천장소를 먼저 받는다
 		var recommendPlaces;
-		var currentUserUID = this.autuService.getLoginUserUid();
 		
+		this.currentUserUID = this.autuService.getLoginUserUid()
 		
-		this.placeListService.getRecommandPlace("ShgXY5S5hZeeRIksJsqP00GcOK52")
-			.subscribe(
-				(data: any) => {
-					this.recommendPlaces = data;
-					console.log("come");
-					console.log(this.recommendPlaces);
-				});
+		/*
+		var currentUserUID = this.autuService.getLoginUserUid()
+			.then(function() {
+				this.placeListService.getRecommandPlace(currentUserUID)
+					.subscribe(
+						(data: any) => {
+							this.recommendPlaces = data;
+							console.log("come");
+							console.log(this.recommendPlaces);
+						});
+			});
 		
+		console.log(currentUserUID.displayName);
+		console.log(currentUserUID.uid);
+		*/
 		
+		//this.placeListService.getRecommandPlace()
+			
+		this.placeListService.recommandPlacesChanged.subscribe(
+			(places:Place[])=> this.recommendPlaces = places,
+			console.log(this.recommendPlaces)
+		);
 		
 		//place가 바뀌면 바로 받을 수 있게 한 것입니다
 		this.placeListService.placesChanged.subscribe(
 			(places: Place[])=> this.places = places
 		);
+		
 		
 		//구글 지도를 표현하기 위한 타입스크립트입니다.
 		var hongik = new google.maps.LatLng( 37.5506747,126.92603059999999);
@@ -134,9 +152,8 @@ export class FindTravelComponent implements OnInit {
 			infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
 			infowindow.open(map, marker);
 		});
+		
 
-		
-		
     }
 	
 	
@@ -174,36 +191,23 @@ export class FindTravelComponent implements OnInit {
 	}
 	
 
+	onTest(user){
+		console.log(user);
+		console.log("firebase auto onAuthStateChagned");
+	}
+	
 	
 	onFindButtonClicked(){
+			
+		
 		this.placeListService.onGetPlacesFromDatabaseFilterPlace(this.selectedPlace);
-		
+		this.placeListService.getRecommandPlace(this.currentUserUID);
 		//추천장소를 가져옵니다 먼저
-		
 		
 		const myArray = [];
 		
 		//먼저 id에 맞는 place 리스트를 뽑아 내자
 		//맞는 id를 찾았다면 이것이 특정 거리에 있는지 뽑아내자
-		console.log(this.recommendPlaces);
-		console.log("2222");
-		
-		for(let place of this.places){
-			for( let recommendPlace of this.recommendPlaces ){
-				console.log("fffffff");
-				console.log(recommendPlace);
-				console.log(place.id);
-				if(place.id == recommendPlace){
-					console.log("this come");
-					if( ( place.latitude >>  this.selectedStartPlaceLat - 0.019) && (place.latitude << this.selectedStartPlaceLat +0.019)
-						&& ( place.longitude >>  this.selectedStartPlaceLng - 0.022) && (place.longitude << this.selectedStartPlaceLng +0.022) ){
-						myArray.push(place);
-						console.log("come");
-						console.log(place);
-					}
-				}
-			}
-		}
 		
 		
 		//2km 내에 있는 장소를 모두 가져옵니다
@@ -211,18 +215,65 @@ export class FindTravelComponent implements OnInit {
 		this.startPlace.latitude =  +document.getElementById("start-Lat").innerHTML;
 		this.startPlace.longitude = +document.getElementById("start-Lng").innerHTML;
 		
+		myArray.push(this.startPlace);
+		
+		for(let place of this.places){
+			for( let recommendPlace of this.recommendPlaces ){
+				if(place.id === +recommendPlace){
+					console.log("this come");
+					//console.log(place);
+					console.log("this come1");
+					myArray.push(place);
+					this.filteringPlaces.push(place);
+					
+				}
+			}
+		}
+		console.log("zzzzzzzzzzzzzzzzzzzzzzz1");
+		console.log(myArray);
+		console.log(this.places);
+		
+		for (let place of this.places){
+			if(myArray.length > 8 ){
+				console.log("여길와서 끝나는거 같은데");
+				break;
+			}
+
+			//if( ( place.latitude >=  this.selectedStartPlaceLat - 50.509) && (place.latitude <= this.selectedStartPlaceLat +50.519)
+			//	&& ( place.longitude <=  this.selectedStartPlaceLng - 50.522) && (place.longitude <= this.selectedStartPlaceLng +50.522) )
+			console.log("안와?");
+			myArray.push(place);
+			this.filteringPlaces.push(place);
+			
+		}
+		
+		
+		console.log("filte")
+		console.log(this.filteringPlaces);
+		var storageRef = firebase.storage().ref();
+		
+		console.log(this.filteringPlaces.length);
+		for (let i = 0;  i< this.filteringPlaces.length ; i++) {
+			/*
+			 이미지 list를 넣는 것입니다
+			 */
+			console.log("hey");
+			storageRef.child('photos/' + this.filteringPlaces[i]['id'] + '.jpg').getDownloadURL().then(function(url) {
+				// Get the download URL for 'images/stars.jpg'
+				// This can be inserted into an <img> tag
+				// This can also be downloaded directly
+				this.filteringImages = url;
+				console.log(url);
+				console.log("fffdafsdfasdfasd");
+				
+			}).catch(function(error) {
+				console.log("error");
+				this.filteringImages[i] = "http://cfile21.uf.tistory.com/image/222EEA3F56542C812CEA83";
+			});
+			console.log("finishi");
+		}
 
 		
-		myArray.push(this.startPlace);
-		for (let place of this.places){
-			if(myArray.length >10 )
-				break;
-			if( ( place.latitude >>  this.selectedStartPlaceLat - 0.019) && (place.latitude << this.selectedStartPlaceLat +0.019)
-			&& ( place.longitude >>  this.selectedStartPlaceLng - 0.022) && (place.longitude << this.selectedStartPlaceLng +0.022) ){
-				myArray.push(place);
-			}
-			console.log(place);
-		}
 		
 		for(let i=0; i < myArray.length; i++){
 			this.distance[i] = [];
@@ -238,9 +289,8 @@ export class FindTravelComponent implements OnInit {
 		
 		
 		/*
-		    외판원 순회를 다이나믹 프로그래밍으로 구현하고, 갔던 루트를 복구 하는 알고리즘입니다
+		 외판원 순회를 다이나믹 프로그래밍으로 구현하고, 갔던 루트를 복구 하는 알고리즘입니다
 		 */
-		
 		// orderOfVisit, dp초기화를 먼저 해준다
 		
 		for(let i =0 ; i< myArray.length; i++){
@@ -249,13 +299,18 @@ export class FindTravelComponent implements OnInit {
 				this.dp[i][j] = -987654321;
 			}
 		}
+		
 		this.orderOfVisit = [];
 		this.orderOfVisit.push(0);
 		
+		
 		console.log("현재 길이입니다");
 		console.log(myArray.length);
+		
+		
+		this.findBestPath(0, 1<<(myArray.length)+1, myArray.length);
 		this.restruct(0, (1<<myArray.length)+1, myArray.length);
-		console.log(this.orderOfVisit);
+		
 		
 		
 		//지도를 다시 그림
@@ -294,11 +349,12 @@ export class FindTravelComponent implements OnInit {
 		var tests='0123456789'
 		var labelIndex = 0;
 		
-		for(let i = 0; i< myArray.length; i++){
+		for(let i = 0; i< myArray.length; i++) {
 			let order = this.orderOfVisit[i];
 			travelPlanCoordinates.push(new google.maps.LatLng(myArray[order].latitude, myArray[order].longitude));
-			console.log(myArray[order].latitude);
-			console.log(myArray[order].longitude);
+			console.log(myArray[order].title);
+			//console.log(myArray[order].latitude);
+			//console.log(myArray[order].longitude);
 			var test = new google.maps.LatLng(myArray[order].latitude, myArray[order].longitude);
 			var marker = new google.maps.Marker({
 				position: test,
@@ -308,14 +364,23 @@ export class FindTravelComponent implements OnInit {
 				title: myArray[order].title,
 				zIndex: i
 			});
+			
+			var infowindow = new google.maps.InfoWindow({
+				content: myArray[order].description
+			});
+			
+			google.maps.event.addListener(marker, 'click', (function (marker, order) {
+				return function () {
+					infowindow.setContent(myArray[order].title);
+					infowindow.open(map, marker);
+				}
+			})(marker, order));
 		}
-		
-		
 		
 		var lineSymbol = {
 			path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
 		};
-
+		
 		var travelPath = new google.maps.Polyline({
 			path: travelPlanCoordinates,
 			strokeColor: '#FF0000',
@@ -328,6 +393,7 @@ export class FindTravelComponent implements OnInit {
 		});
 		
 		travelPath.setMap(map);
+		
 		
 	}
 	

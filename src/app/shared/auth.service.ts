@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core"
+import {Injectable, EventEmitter} from "@angular/core"
 import {Router} from "@angular/router";
 import {User} from "./user.interface";
 
@@ -7,8 +7,12 @@ declare var firebase: any;
 
 @Injectable()
 export class AuthService{
-
-  constructor(private router: Router){}
+	
+	
+	userChanged = new EventEmitter();
+  constructor(private router: Router){
+	  
+  }
 
   signupUser(user: User){
     firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
@@ -58,9 +62,14 @@ export class AuthService{
   
   //로그인한 유저의 uid를 가져오는 것
 	getLoginUserUid(){
-		var user = firebase.auth().currentUser;
-		if(user!=null)
+		var user = firebase.auth().currentUser
+		
+		console.log("헬로우 user");
+		console.log(user);
+		
+		if(user!=null) {
 			return user.uid;
+		}
 	}
 
 }
